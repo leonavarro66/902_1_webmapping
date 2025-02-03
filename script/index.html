@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Projet 902_1 NAVARRO</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Représentation des résultats du projet de Télédection</h1>
+        <p class="description">
+          Explorez cette carte pour visualiser les différents résultats obtenus lors du projet de télédection.
+        </p>
+      </header>
+      
+      <main>
+        <div id="map"></div>
+
+        <div class="right-column">
+          <div class="legend"></div>
+          <!-- Conteneur pour les plots PNG -->
+          <div id="bar-plot-container" class="bar-plot-container">
+            <img id="bar-plot" src="../script/image/temp_mean_ndvi.png" alt="Graphique moyenne et écart type ndvi sur 6 dates" />
+            <img id="bar-plot-2" src="../script/image/matrice_confusion_echelle_pixel.png" alt="Graphique moyenne et écart type ndvi sur 6 dates" />
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="../script/js/main.js"></script>
+  </body>
+</html>
