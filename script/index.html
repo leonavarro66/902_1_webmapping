@@ -21,7 +21,9 @@
 
     <main>
 
-      <div id="map"></div>
+      <div id="map">
+        <div id="wms-legend"></div>
+      </div>
 
       <div class="right-column">
         <div class="legend"></div>
@@ -33,16 +35,14 @@
             alt="Graphique moyenne et écart type ndvi sur 6 dates" />
         </div>
       </div>
-      <div id="wms-legend">
+  </div>
 
-      </div>
+  <!-- Conteneur pour le zoom en plein écran -->
+  <div id="zoom-overlay" class="zoom-overlay">
+    <img id="zoomed-image" src="" alt="Image agrandie" />
+  </div>
 
-      <!-- Conteneur pour le zoom en plein écran -->
-      <div id="zoom-overlay" class="zoom-overlay">
-        <img id="zoomed-image" src="" alt="Image agrandie" />
-      </div>
-
-    </main>
+  </main>
   </div>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>

@@ -55,6 +55,7 @@ main {
   height: 600px;
   border-radius: 4px;
   border: 2px solid #ddd;
+  position: relative;
 }
 
 /* Colonne de droite pour les légendes et les graphiques */
@@ -183,6 +184,16 @@ main {
 
 #wms-legend {
   position: absolute;
-  top: 61%;
-  z-index: 9999;
+  bottom: 10px;  /* Distance depuis le bas de la carte */
+  left: 10px;    /* Distance depuis le bord gauche de la carte */
+  background: rgba(255, 255, 255, 0.3);
+  padding: 5px;
+  border-radius: 5px;
+  z-index: 1000;
+  max-width: 40%; /* Ne prend pas toute la carte */
+}
+
+#wms-legend img {
+  max-width: 100%; /* S'adapte à la taille du conteneur */
+  height: auto;
 }
