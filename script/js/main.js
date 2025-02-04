@@ -54,22 +54,40 @@ function loadWMSLegend() {
   legendContainer.appendChild(legendImg);
 }
 
-// Fonction pour gérer l'affichage des couches et graphiques
+let isClassificationActive = false;
+
+function updateCursor() {
+  if (isClassificationActive) {
+    map._container.style.cursor = "pointer"; // Curseur interactif
+  } else {
+    map._container.style.cursor = ""; // Curseur par défaut
+  }
+}
+
 function toggleLayer(checkbox, layerObj) {
   if (checkbox.checked) {
     layerObj.layer.addTo(map);
     document.getElementById(layerObj.plotId).style.display = 'block';
+
     if (layerObj.layer.options.layers === "lnavarro:carte_essences_echelle_pixel") {
+      isClassificationActive = true;
       loadWMSLegend();
+    } else {
+      // Si une autre couche est activée après, on désactive l'interaction sur Classification Pixel
+      isClassificationActive = false;
     }
+
   } else {
     map.removeLayer(layerObj.layer);
     document.getElementById(layerObj.plotId).style.display = 'none';
+
     if (layerObj.layer.options.layers === "lnavarro:carte_essences_echelle_pixel") {
-      const legendContainer = document.getElementById('wms-legend');
-      legendContainer.innerHTML = "";
+      isClassificationActive = false;
+      document.getElementById('wms-legend').innerHTML = "";
     }
   }
+
+  updateCursor(); // Met à jour le curseur en fonction de l'état
 }
 
 // Création du panneau de gestion des couches
@@ -124,3 +142,78 @@ images.forEach(img => {
 // Ajouter l'événement de clic pour fermer le zoom
 const zoomOverlay = document.getElementById('zoom-overlay');
 zoomOverlay.addEventListener('click', closeZoom);
+
+function showPopup(latlng, content) {
+  L.popup()
+    .setLatLng(latlng)
+    .setContent(content)
+    .openOn(map);
+}
+
+// Mapping des clés valeurs
+const essencesMapping = {
+  0: "NoData",
+  11: "Autres feuillus",
+  12: "Chêne",
+  13: "Robinier",
+  14: "Peupleraie",
+  21: "Autres conifères autre que pin",
+  23: "Douglas",
+  24: "Pin laricio ou pin noir"
+};
+
+function getFeatureInfo(latlng) {
+
+  if (!isClassificationActive) return;
+
+
+  const wmsUrl = "https://www.geotests.net/geoserver/lnavarro/wms";
+
+  // Paramètres de la requête GetFeatureInfo
+  const params = {
+    service: "WMS",
+    version: "1.1.1",
+    request: "GetFeatureInfo",
+    layers: "lnavarro:carte_essences_echelle_pixel",
+    query_layers: "lnavarro:carte_essences_echelle_pixel",
+    styles: "",
+    bbox: map.getBounds().toBBoxString(),
+    width: map.getSize().x,
+    height: map.getSize().y,
+    srs: "EPSG:4326",
+    format: "image/png",
+    transparent: "true",
+    info_format: "application/json",  // JSON pour récupérer la valeur
+    x: Math.round(map.latLngToContainerPoint(latlng).x),
+    y: Math.round(map.latLngToContainerPoint(latlng).y)
+  };
+
+  // Construire l'URL finale
+  const url = wmsUrl + "?" + new URLSearchParams(params).toString();
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      if (data.features.length > 0) {
+        const code = data.features[0].properties.GRAY_INDEX;
+        const essence = essencesMapping[code] || "Inconnu"; // Récupère le nom ou "Inconnu" si absent
+
+        // Création d'un affichage plus stylisé avec HTML
+        const popupContent = `
+                    <div style="font-family: Arial, sans-serif; font-size: 14px;">
+                        <strong>Valeur du pixel :</strong> ${code} <br>
+                        <strong>Essence associée :</strong> ${essence}
+                    </div>
+                `;
+
+        showPopup(latlng, popupContent);
+      } else {
+        showPopup(latlng, "Aucune donnée trouvée.");
+      }
+    })
+    .catch(error => console.error("Erreur GetFeatureInfo:", error));
+}
+
+map.on('click', function (e) {
+  getFeatureInfo(e.latlng);
+});
