@@ -1,9 +1,11 @@
+/* Réinitialisation des marges et des paddings */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* Styles généraux du corps */
 body {
   font-family: Arial, sans-serif;
   line-height: 1.6;
@@ -11,28 +13,33 @@ body {
   background-color: #f4f4f4;
 }
 
+/* Conteneur principal */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
 
+/* En-tête */
 header {
   text-align: center;
   margin-bottom: 20px;
 }
 
+/* Titre */
 h1 {
   color: #2c3e50;
   margin-bottom: 10px;
 }
 
+/* Description sous le titre */
 .description {
   color: #666;
   max-width: 800px;
   margin: 0 auto;
 }
 
+/* Mise en page principale avec deux colonnes */
 main {
   display: grid;
   grid-template-columns: 3fr 1fr;
@@ -43,18 +50,21 @@ main {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Zone de la carte */
 #map {
   height: 600px;
   border-radius: 4px;
   border: 2px solid #ddd;
 }
 
+/* Colonne de droite pour les légendes et les graphiques */
 .right-column {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
+/* Section légende */
 .legend {
   padding: 15px;
   background: #f8f9fa;
@@ -62,43 +72,36 @@ main {
   border: 1px solid #ddd;
 }
 
+/* Titre de la légende */
 .legend h3 {
   margin-bottom: 15px;
   color: #2c3e50;
 }
 
+/* Élément de la légende (couche) */
 .legend-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  cursor: pointer;
+  justify-content: space-between;
   padding: 8px;
   border-radius: 5px;
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  margin-bottom: 5px;
   transition: background 0.3s ease;
 }
 
-#bar-plot {
-  width: 100%;
-  border-radius: 4px;
-  border: 2px solid #ddd;
-  display: none;
-}
-
-#bar-plot-2 {
-  width: 100%;
-  border-radius: 4px;
-  border: 2px solid #ddd;
-  display: none;
-}
-
+/* Légende au survol */
 .legend-item:hover {
   background: #e3e3e3;
 }
 
+/* Checkbox de gestion des couches */
 .layer-toggle {
   display: none;
 }
 
+/* Label de la checkbox (élément cliquable) */
 .layer-toggle + label {
   display: flex;
   align-items: center;
@@ -111,7 +114,75 @@ main {
   font-weight: bold;
 }
 
+/* Style pour le label sélectionné (lorsque la couche est activée) */
 .layer-toggle:checked + label {
   background: #0984e3;
   color: white;
+}
+
+/* Graphiques */
+#bar-plot, #bar-plot-2 {
+  width: 100%;
+  border-radius: 4px;
+  border: 2px solid #ddd;
+  display: none;
+}
+
+/* Responsivité pour les écrans plus petits */
+@media screen and (max-width: 768px) {
+  main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #map {
+    height: 400px;
+  }
+
+  .right-column {
+    width: 100%;
+  }
+
+  /* Ajuster la légende en fonction de la taille de l'écran */
+  .legend-item {
+    padding: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .legend-item label {
+    margin-top: 5px;
+  }
+
+  .layer-toggle + label {
+    font-size: 14px;
+  }
+}
+
+/* Masquer l'image en mode plein écran par défaut */
+#zoom-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Style pour l'image zoomée */
+#zoom-overlay img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+#wms-legend {
+  position: absolute;
+  top: 61%;
+  z-index: 9999;
 }
